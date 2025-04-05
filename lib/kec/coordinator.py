@@ -3,6 +3,7 @@ import threading
 
 import krpc.client
 import krpc.service
+import krpc.services.spacecenter
 
 import kec.bridge
 import kec.util
@@ -68,6 +69,7 @@ class Coordinator:
                         else:
                             print(f"New vessel: {vessel}")
 
+                        vessel.control.input_mode = krpc.services.spacecenter.ControlInputMode.override
                         need_sync = True
                         self._state["vessel"] = vessel
 
