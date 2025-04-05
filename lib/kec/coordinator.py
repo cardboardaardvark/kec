@@ -55,12 +55,19 @@ class Coordinator:
                             self._end_flight()
 
                 print("Checking for vessel change")
-                if self._is_ready("vessel"):
+                if self._state["flying"] and self._is_ready("vessel"):
                     print("Consume vessel from queue")
                     vessel = self._consume("vessel")
 
+                    if type(vessel) == ValueError:
+                        vessel = None
+
                     if vessel != self._state["vessel"]:
-                        print(f"Vessel change: {vessel}")
+                        if vessel == None:
+                            print("Vessel is gone")
+                        else:
+                            print(f"New vessel: {vessel}")
+
                         need_sync = True
                         self._state["vessel"] = vessel
 
@@ -101,8 +108,6 @@ class Coordinator:
         self._active_vessel_stream = None
 
     def enqueue(self, name:str, value):
-        print(f"Enqueue {name} = {value}")
-
         with self._doze:
             self._queue[name]["value"] = value
             self._queue[name]["dirty"] = True
