@@ -132,7 +132,7 @@ def mode_switch_handler(switch_down:bool):
 def reset_button_handler(pressed:bool):
     if pressed:
         print("Stage")
-        # ACTIVE_VESSEL.control.activate_next_stage()
+        COORDINATOR.bridge.command("activate_next_stage")
 
 def throttle_axis_handler(value:float):
     value = (value + 1) / 2
